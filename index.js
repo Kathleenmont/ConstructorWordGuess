@@ -35,9 +35,11 @@ var getLetter = function () {
             var letterChosen = answers.letter;
             lettersGuessed.push(letterChosen)
             console.log("You chose " + letterChosen);
+           
+          
             word.guessLetter(letterChosen)
             word.wordString(letterChosen)
-            console.log(lettersGuessed)
+            console.log("this is var letters guessed " + lettersGuessed)
             getLetter();
             count++;
             

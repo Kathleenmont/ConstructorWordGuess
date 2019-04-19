@@ -4,9 +4,7 @@ var Letter = function (underLyingCharacter, guessedYet, space) {
     this.space = space;
     // A function that returns the underlying character if the letter has been guessed, or a 
     // placeholder (like an underscore) if the letter has not been guessed
-    this.hello = function (){
-        console.log("hello")
-    }
+    
     this.letterOrUnderscore = function (guessedYet, space) {
         if (this.guessedYet === true) {
             return this.underLyingCharacter + " ";
@@ -22,8 +20,8 @@ var Letter = function (underLyingCharacter, guessedYet, space) {
     // the underlying character, updating the stored boolean value to true if 
     // it was guessed correctly
     this.underLyingCharacterMatch = function (letter) {
-        console.log(letter)
-        console.log(this.underLyingCharacter)
+        console.log("lettter = " + letter)
+        console.log("this. underlying character " + this.underLyingCharacter)
         if (letter === this.underLyingCharacter) {
             this.guessedYet = true;
             console.log(this.guessedYet)
@@ -31,15 +29,11 @@ var Letter = function (underLyingCharacter, guessedYet, space) {
             this.guessedYet = false;
             console.log(this.guessedYet)
         }
+        
+        
     }
 
-    this.space = function (letterB) {
-        if (letterB === " ") {
-            space = true;
-        } else {
-            space = false;
-        }
-    }
+   
 }
 
 // var letter = new Letter(letterChosen, false, false);
