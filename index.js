@@ -5,18 +5,16 @@ var wordsAvalible = ["fame", "satellite of love", "reble reble", "space oddity",
 var randomWord = ""
 var lettersGuessed = []
 var word;
+var points = 15;
 
 count = 0;
-var word;
+
 function pickRandomWord() {
     randomWord = wordsAvalible[Math.floor(Math.random() * wordsAvalible.length)];
     // console.log(randomWord)
     lettersOfWord = Array.from(randomWord)
-    console.log(lettersOfWord)
-    // console.log("hi")
     word = new Word(lettersOfWord);
     word.wordString();
-    // console.log("INDAX NW WORD DISPAY " + word.newWordDisplay)
 }
 
 
@@ -38,17 +36,26 @@ var getLetter = function () {
             var letterChosen = answers.letter;
             
             lettersGuessed.push(letterChosen)
-            console.log("You chose " + letterChosen);
+            // console.log("You chose " + letterChosen);
             
             console.log("this is var letters guessed " + lettersGuessed)
             word.guessLetter(letterChosen, lettersGuessed)
             word.wordString(letterChosen, lettersGuessed)
-           
-            console.log("WORD DISPLAY " + word.newWordDisplay )
-            // if (word.wordDisplay.includes("-")) {
-            //     getLetter();
-            // }
-            getLetter()
+
+            if (lettersOfWord.includes(letterChosen)) {
+              console.log("CORRECT")
+            } else {
+                points--;
+                console.log("INCORRECT You gave " + points + " guesses left!")
+            
+            }
+            
+            if (word.wordFinished === false) {
+                getLetter()
+            } else {
+
+            }
+            
            
             
         });
