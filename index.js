@@ -1,59 +1,78 @@
 var inquirer = require('inquirer');
 var Word = require('./word');
-var wordDisplay = "";
-var wordsAvalible = ["fame", "satellite of love", "reble reble", "space oddity", "life on mars", "moonage daydream", "five years", "suffragette city", "aladdin sane", "queen bitch", "modern love", "golden years", "station to station", "panic in detroit", "whatch that man", "diamond dogs", "lady stardust", "the man who sold the world"]
+var wordsAvalible = ["Fame", "Satellite of Love", "Reble Reble", "Space Oddity", "Life on Mars", "Moonage Daydream", "Five Years", "Suffragette City", "Aladdin Sane", "Queen Bitch", "Modern Love", "Golden Years", "Station to Station", "Panic in Detroit", "Whatch That Man", "Diamond Dogs", "Lady Stardust", "The Man Who Sold the World"]
 var randomWord = ""
 var lettersGuessed = []
 var word;
-var points = 15;
+var points = 10;
 
-count = 0;
 
+// make function to pick random word from wordsAvailable- make array
 function pickRandomWord() {
     randomWord = wordsAvalible[Math.floor(Math.random() * wordsAvalible.length)];
-    // console.log(randomWord)
-    lettersOfWord = Array.from(randomWord)
+    lettersOfWord = Array.from(randomWord.toLocaleLowerCase());
     word = new Word(lettersOfWord);
+    // run wordStrin on word object to print out word blanks
     word.wordString();
 }
 
-
-// dont make it recusive- have function that only uses inquirer and returns letter.
-
+// function that runs inquirer to get letter input and has logic for game
 var getLetter = function () {
 
-    
+    // function to valadate that a letter is chosen
+    function validateLetter(letter){
+        var reg = /^[a-z]+$/;
+        return reg.test(letter) || "Please choose a valid letter!";;
+    }
 
-        
         inquirer.prompt([
             {
                 name: "letter",
-                message: "Guess a letter!"
+                message: "Guess a letter!",
+                validate: validateLetter
+               
             }
         ]).then(function (answers) {
+            // variable that stores current letter guessed
+            var letterChosen = answers.letter.toLowerCase();
+            // variable that stores array of letters that have been guessed this round
+            lettersGuessed.push(letterChosen);
             
-            // var letterChosen = new Letter(answers.letter, false, false);
-            var letterChosen = answers.letter;
-            
-            lettersGuessed.push(letterChosen)
-            // console.log("You chose " + letterChosen);
-            
-            console.log("this is var letters guessed " + lettersGuessed)
-            word.guessLetter(letterChosen, lettersGuessed)
-            word.wordString(letterChosen, lettersGuessed)
+            // runs word.js programs passing letterChosen and lettersGuessed
+            word.guessLetter(letterChosen, lettersGuessed);
+            word.wordString(letterChosen, lettersGuessed);
 
+            // logic for game
             if (lettersOfWord.includes(letterChosen)) {
-              console.log("CORRECT")
+              console.log("\x1b[36m%s\x1b[0m", "CORRECT!!\n")
             } else {
                 points--;
-                console.log("INCORRECT You gave " + points + " guesses left!")
+                console.log("\x1b[31m%s\x1b[0m", "INCORRECT You have " + points + " guesses left!\n")
+                if (points === 0) {
+                    // if you run out of points word is displayed and you are asked if you want to play again
+                    console.log("\x1b[31m%s\x1b[0m", "Out of guesses! The song name was " + randomWord + ".\n")
+                    inquirer.prompt([
+                        {
+                            name: "playAgain",
+                            message: "Do you want to play again?",
+                            type: "confrim",
+                            default: true
+                        }
+                    ]).then(function (answers) {
+                        if (answers.playAgain === true) {
+                            startGame();
+                        }
+                    });
+                }
             
             }
-            
-            if (word.wordFinished === false) {
-                getLetter()
-            } else {
-
+            // if word is not solved and points are not 0 you are prompted for a letter agian 
+            if (word.wordFinished === false && points > 0) {
+                getLetter();
+                // if word is solved - congrats message and start game for next word
+            } else  if (word.wordFinished === true) {
+                console.log("\x1b[36m%s\x1b[0m", "CONGRATS! You got it! Next Word! \n");
+                startGame();
             }
             
            
@@ -63,16 +82,17 @@ var getLetter = function () {
     
 }
 
+// function that starts the game
 function startGame() {
+    points = 10;
+    lettersGuessed = [];
+    console.log("\nGUESS THE DAVID BOWIE SONG TITLE! \n")
     pickRandomWord();
     getLetter();
 }
+
 startGame();
 
 
 
-// var word1 = new Word(lettersOfWord);
 
-// console.log(letterC)
-// console.log(word1)
-// word1.wordString();

@@ -1,85 +1,65 @@
 var Letter = require("./letter");
-var space = false;
 var mappedLetters;
-// var letterChosen = new Letter(answers.letter, false, false);
-
 
 var Word = function (lettersOfWord) {
     this.wordDisplay = "";
     this.wordFinished = false;
-    this.newWordDisplay = []
     this.lettersOfWord = [];
     this.lettersInWord = 0;
-    // this.addLetters = function (underChar, guessed, spaces) {
-    //     this.lettersOfWord.push(new Letter(underChar, guessed, spaces));
-    //     // console.log("----- the updated array: "+this.letters)
-    // }
 
-    // A function that returns a string representing the word. This should call the function on each 
-    // letter object (the first function defined in Letter.js) that displays the character or an
-    //  underscore and concatenate those together.
+    // A function that returns a string representing the word. 
     this.wordString = function (letter, guessed) {
-        mappedLetters = lettersOfWord.map(function (item) {
-            var itemLetter = new Letter(item, false, false)
+        // makes all lettersOfWord into letter objects set to mappedLetters
+        mappedLetters = lettersOfWord.map(function (lett) {
+            var itemLetter = new Letter(lett, false, false)
             return itemLetter
         })
 
+        // goes through each of the words letter objects
         for (var i = 0; i < mappedLetters.length; i++) {
 
-            // var letterThing = new Letter();
+            // runs guessLetter function on each letter
             this.guessLetter(letter, guessed)
-            // letterThing.letterOrUnderscore(false, false)
 
-
+            // checks for space in word- updates space var to true 
             if (mappedLetters[i].underLyingCharacter === " ") {
                 mappedLetters[i].space = true;
 
             } else {
                 mappedLetters[i].space = false;
             }
-
+            // sets word display to concatenate lettersobjects that have run the letterOrUnderscore function from letters.js
             this.wordDisplay = this.wordDisplay + mappedLetters[i].letterOrUnderscore(false, false);
         }
-        console.log(this.wordDisplay)
-        
-        // for (var k = 0; k < this.wordDisplay.length; k++) {
-        //     if (this.wordDisplay[k] !== "_" && this.wordDisplay[k] !== "\xa0\xa0" && this.wordDisplay[k] !== "\xa0") {
-        //         this.lettersInWord++;
-        //         console.log(this.lettersInWord)
-        //     }
-        // }
-        
+        // log updated word with underscores
+        console.log("\n" + this.wordDisplay + "\n")
+
+        // checks to see if word is finished 
         if (!this.wordDisplay.includes("_")) {
             this.wordFinished = true;
-           
+
         } else {
-            this.wordFinished = false; 
-           
+            this.wordFinished = false;
+
         }
+        // clears word display to prevent concatenation of itself multiple times
         this.wordDisplay = "";
-        var letterThing = new Letter();
-        console.log(letterThing.letterCount)
     }
 
 
 
-
+    // A function that takes a the letter guessed and the array of previous letters guessed as arguments
     this.guessLetter = function (letter, guessed) {
 
 
-        // A function that takes a character as an argument and calls the 
-        // guess function on each letter object (the second function defined in Letter.js)
-        // underLyingCharacterMatch(letter)
-        this.newWordDisplay = Array.from(this.wordDisplay);
-        // console.log(this.newWordDisplay)
-
         for (var j = 0; j < mappedLetters.length; j++) {
+            // calls the underLyingCharcterMatch function on each letter object- 
+            // to update the wordDispaly to include all correct letters guessed
+            this.WordDisplay = mappedLetters[j].underLyingCharacterMatch(letter, guessed);
 
-            this.newWordDisplay = mappedLetters[j].underLyingCharacterMatch(letter, guessed);
-            
         }
 
-        
+
     }
 
 }
